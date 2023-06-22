@@ -1,13 +1,11 @@
-import {
-	CreationOptional,
-	DataTypes,
-	InferAttributes,
-	InferCreationAttributes,
-	Model
-} from "sequelize";
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 
 import { sequelize } from "../config/db.config";
 
+/**
+ * @class user
+ * @classdesc model for User in the database
+ */
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 	declare id: CreationOptional<string>;
 	declare email: string;

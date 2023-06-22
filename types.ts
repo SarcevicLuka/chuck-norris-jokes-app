@@ -1,13 +1,22 @@
-type UserRegistrationData = {
+export type UserRegistrationData = {
 	email: string;
 	password: string;
 	firstName: string;
 	lastName: string;
 };
 
-type UserLoginData = {
+export type UserLoginData = {
 	email: string;
 	password: string;
 };
 
-export { UserRegistrationData, UserLoginData };
+export type UserDataResponse = {
+	id: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+};
+
+export type Token = {
+	jwt: string;
+};
