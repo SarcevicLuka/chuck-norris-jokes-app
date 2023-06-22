@@ -16,7 +16,7 @@
 		"@typescript-eslint/prefer-interface": 0,
 		"@typescript-eslint/explicit-module-boundary-types": 0,
 		"no-unused-expressions": "off",
-		"@typescript-eslint/no-unused-expressions": 2,
-		"@typescript-eslint/no-unused-vars": ["warn", { "varsIgnorePattern": "^_" }]
+		"newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 3 }],
+		"@typescript-eslint/no-unused-expressions": 2
 	}
 }
