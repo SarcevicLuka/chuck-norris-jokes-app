@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CustomRequest } from "../middleware/Auth";
 import { userRepository } from "../repositories/UserRepository";
 import { mailService } from "../services/MailService";
+import { HttpError } from "../errors/HttpError";
 
 /**
  * @class mailController
@@ -33,14 +34,16 @@ class MailController {
 				text: "Chuck Norris joke. Very very funny."
 			};
 
-			const isSent = await mailService.sendMail(message);
-			console.log(isSent);
-			if (isSent)
-				return res
-					.status(200)
-					.json({ message: "Email successfuly sent" });
+			await mailService.sendMail(message);
+
+			return res.status(200).json({ message: "Email successfuly sent" });
 		} catch (error) {
-			console.log(error);
+			if (error instanceof HttpError) {
+				console.log(error);
+				return res
+					.status(error.status)
+					.json({ message: error.message });
+			}
 		}
 	}
 }

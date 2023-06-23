@@ -12,8 +12,7 @@ export function verifyJWT(req: Request, res: Response, next: NextFunction) {
 	const jwtToken = req.header("Authorization")?.replace("Bearer ", "");
 	if (jwtToken === undefined) return res.sendStatus(401); // No JWT in header
 
-	const jwtSecret =
-		process.env.JWT_SECRET || "62b2f109a901836debe44841443c7604";
+	const jwtSecret = process.env.JWT_SECRET as string;
 
 	Jwt.verify(jwtToken, jwtSecret, (err, decoded) => {
 		if (err) {

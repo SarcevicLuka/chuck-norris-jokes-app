@@ -1,5 +1,6 @@
 import { EmailMessage } from "../../types";
 import nodemailer from "nodemailer";
+import { HttpError } from "../errors/HttpError";
 
 /**
  * @class mailService
@@ -33,13 +34,10 @@ class MailService {
 	async sendMail(message: EmailMessage): Promise<boolean> {
 		const transporter = this.configureTranspoter();
 
-		await transporter.sendMail(message, (error, info) => {
-			console.log(info);
-			console.log(error);
-			if (error) throw new Error("Sending mail failed");
-			return false;
-		});
-		return true;
+		const success = await transporter.sendMail(message);
+		if (!success) throw new HttpError(500, "Email service error");
+
+		return success;
 	}
 }
 

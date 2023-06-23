@@ -5,6 +5,7 @@ import { UserLoginData, UserRegistrationData } from "../../types";
 import { userService } from "../services/UserService";
 import { authService } from "../services/AuthService";
 import { UserMapper } from "../utils/mappers/UserMapper";
+import { HttpError } from "../errors/HttpError";
 
 /**
  * @class userController
@@ -18,25 +19,39 @@ class UserController {
 	 * @param {Object} res Response object
 	 * @returns {Promise<Response>}
 	 */
-	async register(req: Request, res: Response): Promise<Response> {
-		// Validate user data
-		const errors = validationResult(req);
-		if (!errors.isEmpty())
-			return res.status(400).json({ errors: errors.array() });
+	async register(req: Request, res: Response): Promise<Response | undefined> {
+		try {
+			// Validate user data
+			const errors = validationResult(req);
+			if (!errors.isEmpty())
+				return res.status(400).json({ errors: errors.array() });
 
-		const userData: UserRegistrationData = req.body;
+			const userData: UserRegistrationData = req.body;
 
-		// Check if user with given email already exists
-		const existingUser = await userService.findByEmail(userData.email);
-		if (existingUser) {
-			return res.status(403).json({ message: "Email already in use" });
+			// Check if user with given email already exists
+			const existingUser = await userService.findByEmail(userData.email);
+			if (existingUser) {
+				return res
+					.status(403)
+					.json({ message: "Email already in use" });
+			}
+
+			const user = await userService.create(userData);
+
+			const token = authService.createJWT(user.id);
+
+			return res
+				.status(201)
+				.header("Authorization", token.jwt)
+				.json(user);
+		} catch (error) {
+			if (error instanceof HttpError) {
+				console.log(error);
+				return res
+					.status(error.status)
+					.json({ message: error.message });
+			}
 		}
-
-		const user = await userService.create(userData);
-
-		const token = authService.createJWT(user.id);
-
-		return res.status(201).header("Authorization", token.jwt).json(user);
 	}
 
 	/**
@@ -46,35 +61,39 @@ class UserController {
 	 * @param {Object} res Response object
 	 * @returns {Promise<Response>}
 	 */
-	async login(req: Request, res: Response): Promise<Response> {
-		// Validate user data
-		const errors = validationResult(req);
-		if (!errors.isEmpty())
-			return res.status(400).json({ errors: errors.array() });
+	async login(req: Request, res: Response): Promise<Response | undefined> {
+		try {
+			// Validate user data
+			const errors = validationResult(req);
+			if (!errors.isEmpty())
+				return res.status(400).json({ errors: errors.array() });
 
-		const userData: UserLoginData = req.body;
+			const userData: UserLoginData = req.body;
 
-		// Chack if user with given email exists
-		const existingUser = await userService.findByEmail(userData.email);
-		if (!existingUser)
-			return res.status(401).json({ message: "Wrong credentials" });
+			// Chack if user with given email exists
+			const existingUser = await userService.findByEmail(userData.email);
+			if (!existingUser) throw new HttpError(400, "Wrong credentials");
 
-		// Check if password matches
-		const passwordCorrect: boolean = await authService.verifyPassword(
-			userData.password,
-			existingUser.password
-		);
-		if (!passwordCorrect)
-			return res.status(401).json({ message: "Wrong credentials" });
+			// Check if password matches
+			await authService.verifyPassword(
+				userData.password,
+				existingUser.password
+			);
 
-		const token = authService.createJWT(existingUser.id);
-		if (!token)
-			return res.status(500).json({ message: "JWT generation error" });
+			const token = authService.createJWT(existingUser.id);
 
-		return res
-			.status(200)
-			.header("Authorization", token.jwt)
-			.json(UserMapper.mapUserModelToResponse(existingUser));
+			return res
+				.status(200)
+				.header("Authorization", token.jwt)
+				.json(UserMapper.mapUserModelToResponse(existingUser));
+		} catch (error) {
+			if (error instanceof HttpError) {
+				console.log(error);
+				return res
+					.status(error.status)
+					.json({ message: error.message });
+			}
+		}
 	}
 }
 

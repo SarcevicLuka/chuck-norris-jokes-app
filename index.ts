@@ -2,7 +2,7 @@ import "dotenv/config";
 import { sequelize } from "./src/config/db.config";
 import { app } from "./web";
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 sequelize.sync();
 

@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { Token } from "../../types";
+import { HttpError } from "../errors/HttpError";
 
 /**
  * @class authService
@@ -14,15 +15,14 @@ class AuthService {
 	 * @returns {Object} Token Token object containing the created JWT token
 	 */
 	createJWT(userId: string): Token {
-		const jwtSecret = process.env.JWT_SECRET;
+		const jwtSecret = process.env.JWT_SECRET as string;
 		const jwtLifetime = process.env.JWT_LIFETIME_IN_SECONDS;
-		let token = "";
 
-		if (jwtSecret !== undefined) {
-			token = jwt.sign({ sub: userId }, jwtSecret, {
-				expiresIn: `${jwtLifetime}s`
-			});
-		}
+		const token = jwt.sign({ sub: userId }, jwtSecret, {
+			expiresIn: `${jwtLifetime}s`
+		});
+
+		if (!token) throw new HttpError(500, "Error in creating JWT token");
 
 		return { jwt: token };
 	}
@@ -36,8 +36,12 @@ class AuthService {
 	async verifyPassword(
 		incomingPassword: string,
 		existingPassword: string
-	): Promise<boolean> {
-		return await bcrypt.compare(incomingPassword, existingPassword);
+	): Promise<void> {
+		const isValid = await bcrypt.compare(
+			incomingPassword,
+			existingPassword
+		);
+		if (!isValid) throw new HttpError(401, "Wrong credentials");
 	}
 }
 

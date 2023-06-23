@@ -31,7 +31,10 @@ class UserService {
 	 * @returns {Promise<User | null>} User from sequelize or null because it may not exist
 	 */
 	async findByEmail(email: string): Promise<User | null> {
-		return await userRepository.findByEmail(email);
+		const user = await userRepository.findByEmail(email);
+
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		return user;
 	}
 
 	/**
@@ -41,7 +44,9 @@ class UserService {
 	 * @returns {Promise<User | null>} User from sequelize or null because it may not exist
 	 */
 	async findById(id: string): Promise<User | null> {
-		return await userRepository.findById(id);
+		const user = await userRepository.findById(id);
+
+		return user;
 	}
 }
 
