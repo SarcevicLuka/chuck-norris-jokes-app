@@ -13,6 +13,6 @@ app.post("/register", authValidation.register, userController.register);
 app.post("/login", authValidation.login, userController.login);
 
 // Mail route
-app.get("/joke", verifyJWT, mailController.send);
+app.get("/joke", verifyJWT, mailController.sendJoke);
 
 export { app };

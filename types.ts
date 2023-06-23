@@ -20,6 +20,9 @@ export type UserDataResponse = {
 export type Token = {
 	jwt: string;
 };
+export type Joke = {
+	jokeText: string;
+};
 
 export type EmailMessage = {
 	from: string;

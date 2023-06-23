@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CustomRequest } from "../middleware/Auth";
 import { userRepository } from "../repositories/UserRepository";
 import { mailService } from "../services/MailService";
+import { jokeService } from "../services/JokeService";
 import { HttpError } from "../errors/HttpError";
 
 /**
@@ -16,7 +17,7 @@ class MailController {
 	 * @param {Object} res Response object
 	 * @returns {Promise<Response>}
 	 */
-	async send(req: Request, res: Response): Promise<Response | undefined> {
+	async sendJoke(req: Request, res: Response): Promise<Response | undefined> {
 		try {
 			const userId = (req as CustomRequest)?.userId as string;
 
@@ -27,11 +28,13 @@ class MailController {
 					.json({ message: "User not found in database" });
 			}
 
+			const joke = await jokeService.fetchJoke();
+
 			const message = {
 				from: "luka.sarac99@gmail.com",
 				to: `${user.email}`,
 				subject: "Chuck Norris joke",
-				text: "Chuck Norris joke. Very very funny."
+				text: `${joke.jokeText}`
 			};
 
 			await mailService.sendMail(message);
