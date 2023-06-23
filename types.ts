@@ -20,3 +20,10 @@ export type UserDataResponse = {
 export type Token = {
 	jwt: string;
 };
+
+export type EmailMessage = {
+	from: string;
+	to: string;
+	subject: string;
+	text: string;
+};

@@ -9,7 +9,7 @@ import { UserMapper } from "../utils/mappers/UserMapper";
 export class UserRepository {
 	/**
 	 * @description create user in the database
-	 * 
+	 *
 	 * @param {Object} userData Object containing user data: email, password, firstName, lastName
 	 * @returns {Promise<UserDataResponse>} Object excluding createdAt, updatedAt and password for safety
 	 */
@@ -26,12 +26,24 @@ export class UserRepository {
 
 	/**
 	 * @description find user in database by email
-	 * 
+	 *
 	 * @param {String} email User email
 	 * @returns {Promise<User | null>} User from sequelize or null because it may not exist
 	 */
 	async findByEmail(email: string): Promise<User | null> {
 		const user = await User.findOne({ where: { email } });
+
+		return user;
+	}
+
+	/**
+	 * @description find user in database by id
+	 *
+	 * @param {String} id User id
+	 * @returns {Promise<User | null>} User from sequelize or null because it may not exist
+	 */
+	async findById(id: string): Promise<User | null> {
+		const user = await User.findOne({ where: { id } });
 
 		return user;
 	}

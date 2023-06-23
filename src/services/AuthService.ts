@@ -9,7 +9,7 @@ import { Token } from "../../types";
  */
 class AuthService {
 	/**
-	 * 
+	 *
 	 * @param {String} userId User id for creating JWT token
 	 * @returns {Object} Token Token object containing the created JWT token
 	 */
@@ -19,8 +19,8 @@ class AuthService {
 		let token = "";
 
 		if (jwtSecret !== undefined) {
-			token = jwt.sign({ id: userId }, jwtSecret, {
-				expiresIn: jwtLifetime
+			token = jwt.sign({ sub: userId }, jwtSecret, {
+				expiresIn: `${jwtLifetime}s`
 			});
 		}
 
@@ -28,9 +28,9 @@ class AuthService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {String} incomingPassword Password user is sending to the API
-	 * @param {String} existingPassword Password in the database 
+	 * @param {String} existingPassword Password in the database
 	 * @returns {Promise<boolean>} verdict if password matches
 	 */
 	async verifyPassword(
