@@ -5,6 +5,13 @@ export interface CustomRequest extends Request {
 	userId: Jwt.JwtPayload | string | undefined;
 }
 
+/**
+ *
+ * @param req {Object} incomming request
+ * @param res {Object} api response
+ * @param next {Object} next function in the chain
+ * @returns Response<any, Record<string, any>>
+ */
 export function verifyJWT(req: Request, res: Response, next: NextFunction) {
 	const authHeader = res.header("Authorization");
 	if (authHeader === undefined) return res.sendStatus(401); // No authorization header

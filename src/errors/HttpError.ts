@@ -1,5 +1,9 @@
+/**
+ * @class HttpError
+ * @classdesc usermade Error class with a statuc code
+ */
 class HttpError extends Error {
-	public status;
+	public status: number;
 	public message: string;
 
 	constructor(status: number, message: string) {
