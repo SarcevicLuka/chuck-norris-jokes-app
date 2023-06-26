@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Joke } from "../../types";
+import { Joke } from "../types";
 import { HttpError } from "../errors/HttpError";
 
 /**

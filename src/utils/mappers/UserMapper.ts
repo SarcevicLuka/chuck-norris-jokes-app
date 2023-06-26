@@ -1,4 +1,4 @@
-import { UserDataResponse } from "../../../types";
+import { UserDataResponse } from "../../types";
 import User from "../../models/User";
 
 /**
@@ -7,7 +7,7 @@ import User from "../../models/User";
  */
 export class UserMapper {
 	/**
-	 * 
+	 *
 	 * @param {Object} user Sequelize object
 	 * @returns {Object} UserDataResponse Secure object without password, createdAt and updatedAt
 	 */

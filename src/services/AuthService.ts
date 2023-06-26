@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import { Token } from "../../types";
+import { Token } from "../types";
 import { HttpError } from "../errors/HttpError";
 
 /**

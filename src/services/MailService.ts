@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { EmailMessage } from "../../types";
+import { EmailMessage } from "../types";
 import { HttpError } from "../errors/HttpError";
 
 /**

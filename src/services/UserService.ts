@@ -1,4 +1,4 @@
-import { UserDataResponse, UserRegistrationData } from "../../types";
+import { UserDataResponse, UserRegistrationData } from "../types";
 import User from "../models/User";
 import { userRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";

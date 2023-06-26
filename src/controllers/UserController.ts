@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 
-import { UserLoginData, UserRegistrationData } from "../../types";
+import { UserLoginData, UserRegistrationData } from "../types";
 import { userService } from "../services/UserService";
 import { authService } from "../services/AuthService";
 import { UserMapper } from "../utils/mappers/UserMapper";
