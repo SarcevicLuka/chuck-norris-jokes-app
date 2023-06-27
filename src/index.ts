@@ -1,4 +1,4 @@
-import { sequelize } from "./src/config/db.config";
+import { sequelize } from "./config/db.config";
 import app from "./app";
 
 const PORT = process.env.PORT || 8080;

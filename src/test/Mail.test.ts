@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../app";
+import app from "../app";
 import { userRepository } from "../repositories/UserRepository";
 import { HttpError } from "../errors/HttpError";
 import { authService } from "../services/AuthService";
