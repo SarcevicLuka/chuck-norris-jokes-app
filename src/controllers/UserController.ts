@@ -38,7 +38,7 @@ class UserController {
 
 			const user = await userService.create(userData);
 
-			const token = authService.createJWT(user.id);
+			const token = await authService.createJWT(user.id);
 
 			return res
 				.status(201)
@@ -80,7 +80,7 @@ class UserController {
 				existingUser.password
 			);
 
-			const token = authService.createJWT(existingUser.id);
+			const token = await authService.createJWT(existingUser.id);
 
 			return res
 				.status(200)

@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { sequelize } from "./src/config/db.config";
 import app from "./app";
 

@@ -14,13 +14,17 @@ class AuthService {
 	 * @param {String} userId User id for creating JWT token
 	 * @returns {Object} Token Token object containing the created JWT token
 	 */
-	createJWT(userId: string): Token {
+	async createJWT(userId: string): Promise<Token> {
+		console.log("Entered JWT");
 		const jwtSecret = process.env.JWT_SECRET as string;
 		const jwtLifetime = process.env.JWT_LIFETIME_IN_SECONDS;
-
-		const token = jwt.sign({ sub: userId }, jwtSecret, {
+		console.log("Read env");
+		console.log(jwtSecret);
+		console.log(jwtLifetime);
+		const token = await jwt.sign({ sub: userId }, jwtSecret, {
 			expiresIn: `${jwtLifetime}s`
 		});
+		console.log("Created token");
 
 		if (!token) throw new HttpError(500, "Error in creating JWT token");
 
