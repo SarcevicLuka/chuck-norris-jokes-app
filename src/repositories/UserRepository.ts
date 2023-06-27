@@ -33,6 +33,7 @@ export class UserRepository {
 	async findByEmail(email: string): Promise<User | null> {
 		const user = await User.findOne({ where: { email } });
 
+		if (!user) return null;
 		return user;
 	}
 
@@ -40,12 +41,13 @@ export class UserRepository {
 	 * @description find user in database by id
 	 *
 	 * @param {String} id User id
-	 * @returns {Promise<User | null>} User from sequelize or null because it may not exist
+	 * @returns {Promise<User | null>} Mapped user from sequelize or null because it may not exist
 	 */
-	async findById(id: string): Promise<User | null> {
+	async findById(id: string): Promise<UserDataResponse | null> {
 		const user = await User.findOne({ where: { id } });
 
-		return user;
+		if (!user) return null;
+		return UserMapper.mapUserModelToResponse(user);
 	}
 }
 

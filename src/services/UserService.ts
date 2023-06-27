@@ -1,8 +1,8 @@
 import { UserDataResponse, UserRegistrationData } from "../types";
-import User from "../models/User";
 import { userRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";
 import { HttpError } from "../errors/HttpError";
+import User from "../models/User";
 
 /**
  * @class userService
@@ -42,9 +42,9 @@ class UserService {
 	 * @description find user in database by id (call the repository)
 	 *
 	 * @param {String} id User id
-	 * @returns {Promise<User | null>} User from sequelize or null because it may not exist
+	 * @returns {Promise<UserDataResponse | null>}  Mapped user from sequelize or null because it may not exist
 	 */
-	async findById(id: string): Promise<User | null> {
+	async findById(id: string): Promise<UserDataResponse | null> {
 		const user = await userRepository.findById(id);
 
 		return user;
