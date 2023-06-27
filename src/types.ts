@@ -20,6 +20,11 @@ export type UserDataResponse = {
 	lastName: string;
 };
 
+// Password which will be verified with login data
+export type UserDataPasswordResponse = {
+	password: string;
+};
+
 // JWT token
 export type Token = {
 	jwt: string;

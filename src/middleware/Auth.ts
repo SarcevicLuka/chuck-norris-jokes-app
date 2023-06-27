@@ -16,6 +16,10 @@ export function verifyJWT(req: Request, res: Response, next: NextFunction) {
 	const authHeader = res.header("Authorization");
 	if (authHeader === undefined) return res.sendStatus(401); // No authorization header
 
+	if (!req.header("Authorization")?.includes("Bearer "))
+		// No Bearer schema in header
+		return res.sendStatus(401);
+
 	const jwtToken = req.header("Authorization")?.replace("Bearer ", "");
 	if (jwtToken === undefined) return res.sendStatus(401); // No JWT in header
 

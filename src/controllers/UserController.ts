@@ -75,10 +75,12 @@ class UserController {
 			if (!existingUser) throw new HttpError(400, "Wrong credentials");
 
 			// Check if password matches
-			await authService.verifyPassword(
+			const isValid = await authService.verifyPassword(
 				userData.password,
-				existingUser.password
+				UserMapper.mapUserModelToPasswordResponse(existingUser).password
 			);
+
+			if (!isValid) throw new HttpError(401, "Wrong credentials");
 
 			const token = await authService.createJWT(existingUser.id);
 

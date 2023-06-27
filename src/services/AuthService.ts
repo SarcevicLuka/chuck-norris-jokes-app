@@ -36,12 +36,13 @@ class AuthService {
 	async verifyPassword(
 		incomingPassword: string,
 		existingPassword: string
-	): Promise<void> {
+	): Promise<boolean> {
 		const isValid = await bcrypt.compare(
 			incomingPassword,
 			existingPassword
 		);
-		if (!isValid) throw new HttpError(401, "Wrong credentials");
+
+		return isValid;
 	}
 }
 

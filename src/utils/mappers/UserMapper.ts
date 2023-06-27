@@ -1,4 +1,4 @@
-import { UserDataResponse } from "../../types";
+import { UserDataPasswordResponse, UserDataResponse } from "../../types";
 import User from "../../models/User";
 
 /**
@@ -17,6 +17,14 @@ export class UserMapper {
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName
+		};
+	}
+
+	static mapUserModelToPasswordResponse(
+		user: User
+	): UserDataPasswordResponse {
+		return {
+			password: user.password
 		};
 	}
 }

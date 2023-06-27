@@ -24,7 +24,7 @@ class MailController {
 			const user = await userRepository.findById(userId);
 			if (!user) {
 				return res
-					.status(500)
+					.status(404)
 					.json({ message: "User not found in database" });
 			}
 
