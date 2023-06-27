@@ -13,6 +13,7 @@ of Chuck Norris jokes to the users email address.
     -   [Config](#config)
     -   [Database](#database)
     -   [Running](#running)
+    -   [Testing](#testing)
     -   [Checking and linting](#checking-and-linting)
 -   [Structure](#structure)
     -   [Structure of src/](#structure-of-src)
@@ -74,6 +75,8 @@ See [LOCAL.md](LOCAL.md) for more info on how to set everything up localy.
 
 ---
 
+[Back to Table of contents](#table-of-contents)
+
 ## Running
 
 `.env` file is needed for local development because it holds all the configuration strings.
@@ -83,6 +86,42 @@ Running the application:
 ```
 npm start
 ```
+
+---
+
+[Back to Table of contents](#table-of-contents)
+
+## Testing
+
+Testing is done with jest and supertest for making api calls in tests.
+
+Test packages installation with npm:
+
+```
+npm install -D ts-jest jest supertest @types/supertest
+```
+
+Tests are in the [test](./src/test/) directory. In the directory are test files that have the _.test.ts_ extension.
+
+Tests are run with:
+
+```
+npm jest
+```
+
+to run all tests or create a script in [package.json](./package.json) file.
+
+```
+"script": "jest"
+```
+
+To run the specific test file run:
+
+```
+npm test
+```
+
+npm test -- _filename_.test.ts.
 
 ---
 
