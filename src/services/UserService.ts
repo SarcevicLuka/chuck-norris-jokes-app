@@ -2,6 +2,7 @@ import { UserDataResponse, UserRegistrationData } from "../types";
 import User from "../models/User";
 import { userRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";
+import { HttpError } from "../errors/HttpError";
 
 /**
  * @class userService
@@ -20,6 +21,8 @@ class UserService {
 
 		const user: UserDataResponse = await userRepository.create(userData);
 
+		if (!user) throw new HttpError(500, "Error creating user");
+
 		return user;
 	}
 
@@ -32,7 +35,6 @@ class UserService {
 	async findByEmail(email: string): Promise<User | null> {
 		const user = await userRepository.findByEmail(email);
 
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		return user;
 	}
 

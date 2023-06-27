@@ -32,7 +32,7 @@ class UserController {
 			const existingUser = await userService.findByEmail(userData.email);
 			if (existingUser) {
 				return res
-					.status(403)
+					.status(409)
 					.json({ message: "Email already in use" });
 			}
 
