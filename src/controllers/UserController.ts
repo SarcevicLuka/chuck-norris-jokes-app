@@ -29,11 +29,7 @@ class UserController {
 
 			// Check if user with given email already exists
 			const existingUser = await userService.findByEmail(userData.email);
-			if (existingUser) {
-				return res
-					.status(409)
-					.json({ message: "Email already in use" });
-			}
+			if (existingUser) throw new HttpError(409, "Email already in use");
 
 			const user = await userService.create(userData);
 
@@ -71,14 +67,13 @@ class UserController {
 
 			// Chack if user with given email exists
 			const existingUser = await userService.findByEmail(userData.email);
-			if (!existingUser) throw new HttpError(400, "Wrong credentials");
+			if (!existingUser) throw new HttpError(401, "Wrong credentials");
 
 			// Check if password matches
 			const isValid = await authService.verifyPassword(
 				userData.password,
 				UserMapper.mapUserModelToPasswordResponse(existingUser).password
 			);
-
 			if (!isValid) throw new HttpError(401, "Wrong credentials");
 
 			const token = await authService.createJWT(existingUser.id);

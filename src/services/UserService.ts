@@ -42,10 +42,12 @@ class UserService {
 	 * @description find user in database by id (call the repository)
 	 *
 	 * @param {String} id User id
-	 * @returns {Promise<UserDataResponse | null>}  Mapped user from sequelize or null because it may not exist
+	 * @returns {Promise<UserDataResponse>}  Mapped user from sequelize or null because it may not exist
 	 */
-	async findById(id: string): Promise<UserDataResponse | null> {
+	async findById(id: string): Promise<UserDataResponse> {
 		const user = await userRepository.findById(id);
+
+		if (!user) throw new HttpError(404, "User not found in database");
 
 		return user;
 	}

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { CustomRequest } from "../middleware/Auth";
-import { userRepository } from "../repositories/UserRepository";
 import { mailService } from "../services/MailService";
 import { jokeService } from "../services/JokeService";
 import { HttpError } from "../errors/HttpError";
+import { userService } from "../services/UserService";
 
 /**
  * @class mailController
@@ -21,23 +21,22 @@ class MailController {
 		try {
 			const userId = (req as CustomRequest)?.userId as string;
 
-			const user = await userRepository.findById(userId);
-			if (!user) {
-				return res
-					.status(404)
-					.json({ message: "User not found in database" });
-			}
+			const user = await userService.findById(userId);
 
 			const joke = await jokeService.fetchJoke();
+			if (!joke.jokeText) {
+				throw new HttpError(500, "Error fetching joke");
+			}
 
 			const message = {
-				from: "luka.sarac99@gmail.com",
+				from: process.env.SENDER_EMAIL as string,
 				to: `${user.email}`,
 				subject: "Chuck Norris joke",
 				text: `${joke.jokeText}`
 			};
 
-			await mailService.sendMail(message);
+			const success = await mailService.sendMail(message);
+			if (!success) throw new HttpError(500, "Email service error");
 
 			return res.status(200).json({ message: "Email successfuly sent" });
 		} catch (error) {

@@ -118,10 +118,8 @@ to run all tests or create a script in [package.json](./package.json) file.
 To run the specific test file run:
 
 ```
-npm test
+npm test -- _filename_.test.ts
 ```
-
-npm test -- _filename_.test.ts.
 
 ---
 

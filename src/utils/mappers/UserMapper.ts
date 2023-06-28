@@ -20,6 +20,11 @@ export class UserMapper {
 		};
 	}
 
+	/**
+	 *
+	 * @param {Object} user Sequelize object
+	 * @returns {Object} UserDataPasswordResponse return user password that is compared during login
+	 */
 	static mapUserModelToPasswordResponse(
 		user: User
 	): UserDataPasswordResponse {

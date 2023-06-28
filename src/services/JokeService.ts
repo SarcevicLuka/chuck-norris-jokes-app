@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Joke } from "../types";
-import { HttpError } from "../errors/HttpError";
 
 /**
  * @class jokeService
@@ -15,8 +14,6 @@ class JokeService {
 		const url = process.env.JOKE_API_URL as string;
 
 		const joke = await axios.get(url);
-
-		if (!joke) throw new HttpError(500, "Error fetching joke");
 
 		return {
 			jokeText: joke.data.value

@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import { EmailMessage } from "../types";
-import { HttpError } from "../errors/HttpError";
 
 /**
  * @class mailService
@@ -29,13 +28,20 @@ class MailService {
 	 * @description sends the given message with the configured transporter
 	 *
 	 * @param message {EmailMessage} message to be sent with transporter
-	 * @returns {Promise<boolean>} boolean represents the success of the sendin process
+	 * @returns {Promise<boolean>} boolean represents the success of the email sending process
 	 */
 	async sendMail(message: EmailMessage): Promise<boolean> {
 		const transporter = this.configureTranspoter();
 
-		const success = await transporter.sendMail(message);
-		if (!success) throw new HttpError(500, "Email service error");
+		let success: boolean = await transporter
+			.sendMail(message)
+			.catch((err) => {
+				// Error happens and success stays undefined
+				console.log(err);
+			});
+
+		if (success === undefined) success = false;
+		else success = true;
 
 		return success;
 	}
