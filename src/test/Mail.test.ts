@@ -1,12 +1,15 @@
 import request from "supertest";
 import app from "../app";
+import nodemailer from "nodemailer";
 import { userRepository } from "../repositories/UserRepository";
-import { HttpError } from "../errors/HttpError";
 import { authService } from "../services/AuthService";
 import { mailService } from "../services/MailService";
-import { EmailMessage } from "../types";
 
 describe("Mail sending testing", () => {
+	afterEach(() => {
+		jest.restoreAllMocks();
+	});
+
 	it("Should return 200 and email successfuly sent", async () => {
 		jest.spyOn(userRepository, "findById").mockImplementation(
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,8 +28,6 @@ describe("Mail sending testing", () => {
 		const response = await request(app)
 			.get("/user/joke")
 			.set({ Authorization: `Bearer ${token.jwt}` });
-
-		//console.log(response);
 
 		expect(response.status).toBe(200);
 		expect(response.body).toStrictEqual({
@@ -54,25 +55,32 @@ describe("Mail sending testing", () => {
 		});
 	});
 
-	it("Should return 401 no authorization header", async () => {
+	it("Should return 500 email service error ==> transporter auth setup wrong", async () => {
 		jest.spyOn(userRepository, "findById").mockImplementation(
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			async (id: string) => {
 				return {
 					id: id,
-					email: "saresarac2@gmail.com",
+					email: "emaildoesnot@exist.com",
 					firstName: "John",
 					lastName: "Doe"
 				};
 			}
 		);
 
-		jest.spyOn(mailService, "sendMail").mockImplementation(
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			async (message: EmailMessage) => {
-				throw new HttpError(500, "Email service error");
-			}
-		);
+		jest.spyOn(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			mailService as any,
+			"configureTranspoter"
+		).mockImplementation(() => {
+			return nodemailer.createTransport({
+				service: "gmail",
+				auth: {
+					user: "wrong@email.com",
+					pass: "wrongPass"
+				}
+			});
+		});
 
 		const token = await authService.createJWT("radnomId");
 

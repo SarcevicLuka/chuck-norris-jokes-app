@@ -12,6 +12,7 @@ describe("Mail sending testing", () => {
 	afterEach(() => {
 		jest.restoreAllMocks();
 	});
+
 	describe("Registration testing", () => {
 		it("Should register and return 201 Created", async () => {
 			jest.spyOn(userRepository, "create").mockImplementation(
@@ -394,7 +395,6 @@ describe("Mail sending testing", () => {
 					.post("/auth/login")
 					.send(mockUser);
 
-				console.log(response.body);
 				expect(response.status).toBe(422);
 				expect(response.body).toStrictEqual({
 					errors: [
