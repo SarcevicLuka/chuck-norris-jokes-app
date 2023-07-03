@@ -7,6 +7,7 @@ of Chuck Norris jokes to the users email address.
 
 -   [Chuck Norris joke backend application](#chuck-norris-joke-backend-application)
 -   [Table of contents](#table-of-contents)
+-   [Mail sending](#mail-sending)
 -   [Folder Structure](#folder-structure)
 -   [Running, building and testing of the application](#running-building-and-testing-of-the-application)
     -   [Local setup](#local-setup)
@@ -32,12 +33,26 @@ of Chuck Norris jokes to the users email address.
 
 ---
 
+[Back to Table of contents](#table-of-contents)
+
+# Mail sending
+
+Mail sending is done with nodemailer. Nodemailer is setup to send e-mails using my own e-mail account as a service.
+
+To make your own gmail account with nodemailer you will need to create a [application specific](https://security.google.com/settings/security/apppasswords) password. 2FA needs to be enabled on your account to create the password. Once you create a password you can use it in transoprter configuration.
+
+---
+
+[Back to Table of contents](#table-of-contents)
+
 # Folder Structure
 
 The main application is located in the [index.ts](./index.ts) and [app.ts](./app.ts) files. Index holds the server and app holds the route specification. [Src](./src/) directory holds the contollers,
 services, repositories, models, middleware, routes, validations and tests.
 
 ---
+
+[Back to Table of contents](#table-of-contents)
 
 # Running, building and testing of the application
 
