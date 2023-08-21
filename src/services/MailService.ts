@@ -32,18 +32,14 @@ class MailService {
 	 */
 	async sendMail(message: EmailMessage): Promise<boolean> {
 		const transporter = this.configureTranspoter();
+		let success = false;
 
-		let success: boolean = await transporter
-			.sendMail(message)
-			.catch((err) => {
-				// Error happens and success stays undefined
-				console.log(err);
-			});
+		success = await transporter.sendMail(message).catch((err) => {
+			// Error happens and success stays undefined
+			console.log(err);
+		});
 
-		if (success === undefined) success = false;
-		else success = true;
-
-		return success;
+		return success === undefined ? false : true;
 	}
 }
 

@@ -17,7 +17,7 @@ class MailController {
 	 * @param {Object} res Response object
 	 * @returns {Promise<Response>}
 	 */
-	async sendJoke(req: Request, res: Response): Promise<Response | undefined> {
+	async sendJoke(req: Request, res: Response): Promise<void> {
 		try {
 			const userId = (req as CustomRequest)?.userId as string;
 
@@ -35,16 +35,14 @@ class MailController {
 				text: `${joke.jokeText}`
 			};
 
-			const success = await mailService.sendMail(message);
+			const success = mailService.sendMail(message);
 			if (!success) throw new HttpError(500, "Email service error");
 
-			return res.status(200).json({ message: "Email successfuly sent" });
+			res.status(200).json({ message: "Email successfuly sent" });
 		} catch (error) {
 			if (error instanceof HttpError) {
 				console.log(error);
-				return res
-					.status(error.status)
-					.json({ message: error.message });
+				res.status(error.status).json({ message: error.message });
 			}
 		}
 	}

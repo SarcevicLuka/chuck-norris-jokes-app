@@ -18,12 +18,12 @@ class UserController {
 	 * @param {Object} res Response object
 	 * @returns {Promise<Response>}
 	 */
-	async register(req: Request, res: Response): Promise<Response | undefined> {
+	async register(req: Request, res: Response): Promise<void> {
 		try {
 			// Validate user data
 			const errors = validationResult(req);
 			if (!errors.isEmpty())
-				return res.status(422).json({ errors: errors.array() });
+				res.status(422).json({ errors: errors.array() });
 
 			const userData: UserRegistrationData = req.body;
 
@@ -35,16 +35,11 @@ class UserController {
 
 			const token = await authService.createJWT(user.id);
 
-			return res
-				.status(201)
-				.header("Authorization", token.jwt)
-				.json(user);
+			res.status(201).header("Authorization", token.jwt).json(user);
 		} catch (error) {
 			if (error instanceof HttpError) {
 				console.log(error);
-				return res
-					.status(error.status)
-					.json({ message: error.message });
+				res.status(error.status).json({ message: error.message });
 			}
 		}
 	}
@@ -56,12 +51,12 @@ class UserController {
 	 * @param {Object} res Response object
 	 * @returns {Promise<Response>}
 	 */
-	async login(req: Request, res: Response): Promise<Response | undefined> {
+	async login(req: Request, res: Response): Promise<void> {
 		try {
 			// Validate user data
 			const errors = validationResult(req);
 			if (!errors.isEmpty())
-				return res.status(422).json({ errors: errors.array() });
+				res.status(422).json({ errors: errors.array() });
 
 			const userData: UserLoginData = req.body;
 
@@ -78,16 +73,13 @@ class UserController {
 
 			const token = await authService.createJWT(existingUser.id);
 
-			return res
-				.status(200)
+			res.status(200)
 				.header("Authorization", token.jwt)
 				.json(UserMapper.mapUserModelToResponse(existingUser));
 		} catch (error) {
 			if (error instanceof HttpError) {
 				console.log(error);
-				return res
-					.status(error.status)
-					.json({ message: error.message });
+				res.status(error.status).json({ message: error.message });
 			}
 		}
 	}
